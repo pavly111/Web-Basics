@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rock Paper Scissors</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background: #f0f0f0;
+    }
+
+    .container {
+      width: 450px;
+      padding: 20px;
+      background: #fff;
+      box-shadow: 0 0 15px rgba(0,0,0,0.15);
+      border-radius: 20px;
+      text-align: center;
+    }
+
+    .choices-row {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .hand-img {
+      width: 90px;
+      height: 90px;
+      object-fit: contain;
+      transition: transform 0.3s ease;
+      scale: 1.5;
+    }
+
+    .player-hand {
+      transform: rotate(90deg);
+    }
+
+    .computer-hand {
+      transform: rotate(-90deg) scaleX(-1);
+    }
+
+    .label {
+      color: #7836e0;
+      font-weight: bold;
+      margin: 5px 0 15px;
+    }
+
+    .result {
+      font-size: 20px;
+      font-weight: bold;
+      margin: 10px 0 20px;
+      color: #7836e0;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .choices {
+      width: 90px;
+      height: 90px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      opacity: 0.4;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: #7836e0;
+    }
+
+    .choices:hover {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+
+    .choices img {
+      width: 50px;
+      height: 50px;
+    }
+
+    @keyframes rotateShakePlayer {
+      0%, 100% { transform: rotate(90deg); }
+      25% { transform: rotate(98deg); }
+      50% { transform: rotate(86deg); }
+      75% { transform: rotate(94deg); }
+    }
+
+    @keyframes rotateShakeComputer {
+      0%, 100% { transform: rotate(-90deg) scaleX(-1); }
+      25% { transform: rotate(-98deg) scaleX(-1); }
+      50% { transform: rotate(-82deg) scaleX(-1); }
+      75% { transform: rotate(-94deg) scaleX(-1); }
+    }
+
+    .shaking-player {
+      animation: rotateShakePlayer 0.4s ease-in-out infinite;
+    }
+
+    .shaking-computer {
+      animation: rotateShakeComputer 0.4s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="choices-row">
+      <div>
+        <img id="player-img" class="hand-img player-hand" src="rock.png" alt="Player">
+        <p class="label">You</p>
+      </div>
+      <div>
+        <img id="computer-img" class="hand-img computer-hand" src="rock.png" alt="Computer">
+        <p class="label">Computer</p>
+      </div>
+    </div>
+    <p id="result" class="result">Let's Play!!</p>
+    <div class="buttons">
+      <button class="choices" data-choice="rock">
+        <img src="rock.png" alt="Rock">Rock
+      </button>
+      <button class="choices" data-choice="paper">
+        <img src="paper.png" alt="Paper">Paper
+      </button>
+      <button class="choices" data-choice="scissors">
+        <img src="scissors.png" alt="Scissors">Scissors
+      </button>
+    </div>
+  </div>
+
+  <script>
+    const choices = ["rock", "paper", "scissors"];
+    const resultText = document.getElementById("result");
+    const playerImg = document.getElementById("player-img");
+    const computerImg = document.getElementById("computer-img");
+    const buttons = document.querySelectorAll(".choices");
+
+    function getComputerChoice() {
+      return choices[Math.floor(Math.random() * choices.length)];
+    }
+
+    function getResult(player, computer) {
+      if (player === computer) return "It's a Tie!";
+      if (
+        (player === "rock" && computer === "scissors") ||
+        (player === "paper" && computer === "rock") ||
+        (player === "scissors" && computer === "paper")
+      ) return "You Win!";
+      return "Computer Wins!";
+    }
+
+    buttons.forEach(button => {
+      button.addEventListener("click", () => {
+        const playerChoice = button.dataset.choice;
+        const computerChoice = getComputerChoice();
+
+        playerImg.src = "rock.png";
+        computerImg.src = "rock.png";
+
+        playerImg.classList.add("shaking-player");
+        computerImg.classList.add("shaking-computer");
+
+        resultText.textContent = "Wait...";
+
+        setTimeout(() => {
+          playerImg.classList.remove("shaking-player");
+          computerImg.classList.remove("shaking-computer");
+
+          playerImg.src = `${playerChoice}.png`;
+          computerImg.src = `${computerChoice}.png`;
+
+          resultText.textContent = getResult(playerChoice, computerChoice);
+        }, 1500);
+      });
+    });
+  </script>
+</body>
+</html>

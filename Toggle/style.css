@@ -1,0 +1,60 @@
+body{
+    background-color: skyblue;
+    transition: background-color 0.3s ease;
+    display: flex;
+}
+body:has(.t:checked){
+    background-color: black;
+}
+.rec{
+    width: 600px;
+    height: 200px;
+    background-color: lightgrey;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 200px;
+    transform: translateX(400px) translateY(300px);
+}
+.t{
+    display: none;
+}
+.circle{
+    height: 190px;
+    width: 190px;
+    background-color: skyblue;
+    transform: translateY(5px) translateX(5px);
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+    transition: transform 0.3s;
+}
+.t:checked + .circle{
+    transform: translateX(405px) translateY(5px);
+    background-color: black;
+}
+.sun{
+    width: 90%;
+    height: 90%;
+    margin-left: 10px;
+    margin-top: 10px;
+    border-radius: 50%;
+    object-fit: cover;
+    position: absolute;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+  }
+  .moon{
+    width: 90%;
+    height: 90%;
+    margin-left: 10px;
+    margin-top: 10px;
+    border-radius: 50%;
+    object-fit: cover;
+    position: absolute;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .t:checked + .circle .sun {
+    opacity: 0;
+  }
+  .t:checked + .circle .moon {
+    opacity: 1;
+  }

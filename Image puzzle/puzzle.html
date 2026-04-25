@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Image Puzzle</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #f0f8ff;
+      font-family: sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      display: flex;
+      gap: 40px;
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    }
+    .puzzle-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .puzzle-grid {
+      display: grid;
+      border: 2px solid #999;
+    }
+    .tile {
+      width: 100px;
+      height: 100px;
+      border: 1px solid #ccc;
+      background-image: none;
+      background-size: cover;
+      cursor: move;
+    }
+    .tile.drag-over {
+      outline: 2px dashed #333;
+    }
+    .right-panel {
+      text-align: center;
+    }
+    .right-panel img {
+      width: 300px;
+      border: 2px solid #999;
+      border-radius: 8px;
+    }
+    .info {
+      margin: 10px 0;
+    }
+    .buttons, .levels {
+      margin-top: 10px;
+    }
+    button {
+      margin: 0 5px;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="puzzle-section">
+    <div class="info">
+      <span>Steps: <span id="steps">0</span></span> |
+      <span>Time: <span id="time">0</span> sec</span>
+    </div>
+    <div class="levels">
+      <label><input type="radio" name="level" value="3" checked> Easy</label>
+      <label><input type="radio" name="level" value="4"> Medium</label>
+      <label><input type="radio" name="level" value="5"> Hard</label>
+    </div>
+    <div id="puzzle" class="puzzle-grid"></div>
+  </div>
+  <div class="right-panel">
+    <h3>Original Image</h3>
+    <img id="preview" src="images.jpeg" />
+    <div class="buttons">
+      <button onclick="alert('Drag and drop the pieces into correct order.')">Rules</button>
+      <button onclick="changeImage()">Another Photo</button>
+      <button onclick="alert('Made with ❤️ by Pavly')">About</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const puzzle = document.getElementById('puzzle');
+  const preview = document.getElementById('preview');
+  const stepsSpan = document.getElementById('steps');
+  const timeSpan = document.getElementById('time');
+
+  const unknownImages = Array.from({ length: 10 }, (_, i) => `Unknown${i === 0 ? '' : '-' + (i + 1)}.png`);
+  const jpegImages = Array.from({ length: 4 }, (_, i) => `images${i === 0 ? '' : '-' + (i + 1)}.jpeg`);
+  const allImages = [...unknownImages, ...jpegImages];
+
+  let size = 3;
+  let board = [];
+  let original = [];
+  let selectedImage = '';
+  let draggedIndex = null;
+  let steps = 0;
+  let seconds = 0;
+  let timer = null;
+
+  document.querySelectorAll('input[name="level"]').forEach(r => {
+  r.addEventListener('change', () => {
+    size = parseInt(r.value);
+    startGame(); 
+  });
+});
+
+  function startGame() {
+  clearInterval(timer);
+  seconds = 0;
+  steps = 0;
+  timeSpan.textContent = 0;
+  stepsSpan.textContent = 0;
+
+  puzzle.style.gridTemplateColumns = `repeat(${size}, 100px)`;
+  puzzle.style.gridTemplateRows = `repeat(${size}, 100px)`;
+
+  board = [];
+  original = [];
+
+  for (let i = 0; i < size * size; i++) {
+    original.push(i);
+    board.push(i);
+  }
+
+  board = board.sort(() => Math.random() - 0.5);
+  drawBoard();
+
+  timer = setInterval(() => {
+    seconds++;
+    timeSpan.textContent = seconds;
+  }, 1000);
+}
+
+function changeImage() {
+  selectedImage = allImages[Math.floor(Math.random() * allImages.length)];
+  preview.src = selectedImage;
+  startGame();
+}
+  function drawBoard() {
+    puzzle.innerHTML = '';
+    board.forEach((tileIndex, i) => {
+      const tile = document.createElement('div');
+      tile.className = 'tile';
+      tile.draggable = true;
+      tile.dataset.index = i;
+      tile.dataset.tile = tileIndex;
+      const x = tileIndex % size;
+      const y = Math.floor(tileIndex / size);
+      tile.style.backgroundImage = `url('${selectedImage}')`;
+      tile.style.backgroundSize = `${size * 100}px ${size * 100}px`;
+      tile.style.backgroundPosition = `-${x * 100}px -${y * 100}px`;
+
+      tile.addEventListener('dragstart', e => {
+        draggedIndex = i;
+      });
+
+      tile.addEventListener('dragover', e => {
+        e.preventDefault();
+        tile.classList.add('drag-over');
+      });
+
+      tile.addEventListener('dragleave', e => {
+        tile.classList.remove('drag-over');
+      });
+
+      tile.addEventListener('drop', e => {
+        tile.classList.remove('drag-over');
+        if (draggedIndex === null || draggedIndex === i) return;
+        [board[draggedIndex], board[i]] = [board[i], board[draggedIndex]];
+        draggedIndex = null;
+        steps++;
+        stepsSpan.textContent = steps;
+        drawBoard();
+
+        if (checkSolved()) {
+          clearInterval(timer);
+          setTimeout(() => {
+            alert(`🎉 Puzzle Solved!\nSteps: ${steps}\nTime: ${seconds} seconds`);
+          }, 100);
+        }
+      });
+
+      puzzle.appendChild(tile);
+    });
+  }
+
+  function checkSolved() {
+    return board.every((val, idx) => val === original[idx]);
+  }
+
+selectedImage = allImages[Math.floor(Math.random() * allImages.length)];
+preview.src = selectedImage;
+startGame();
+</script>
+
+</body>
+</html>

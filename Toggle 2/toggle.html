@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>js toggle</title>
+</head>
+<body>
+    <div class="toggle-container">
+        <div id="slider"></div>
+        <div id="circle"></div>
+    </div>
+    <style>
+        body{
+            background-color: black;
+            transition: background-color 0.4s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .toggle-container {
+            position: relative;
+            width: 400px;
+            height: 200px;
+        }
+        #slider{
+            width: 400px;
+            height: 200px;
+            border-radius: 200px;
+            background: rgba(255, 255, 255, 0.4);
+        }
+        #circle{
+            background-color: white;
+            width: 193px;
+            height: 193px;
+            border-radius: 50%;
+            position: absolute;
+            top: 3.5px;
+            left: 3.5px;
+            transition: background-color 0.4s ease;
+            transition: transform 0.4s ease;
+        }
+        .toggle{
+            transform: translateX(195px);
+            background-color: darkslategray !important;
+        }
+        .bg{
+            background-color: aquamarine;
+        }
+    </style>
+    <script>
+        const to=document.getElementById("circle")
+        to.addEventListener("click",
+        function(){
+            to.classList.toggle("toggle");
+            document.body.classList.toggle("bg");
+        })
+    </script>
+    </body>
+</html>

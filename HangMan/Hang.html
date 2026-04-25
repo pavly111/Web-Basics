@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hangman Game</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 40px 10px;
+      background: linear-gradient(135deg, #cccccc, #8b5e3c);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .game-box {
+      max-width: 600px;
+      width: 100%;
+      background-color: #ffffffee;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      position: relative;
+    }
+
+    h1 {
+      margin-top: 0;
+      font-size: 2.5rem;
+      color: #333;
+    }
+
+    svg {
+      width: 200px;
+      height: 250px;
+      margin: 0 auto 20px;
+      display: block;
+    }
+
+    .gallow {
+      stroke: #000;
+      stroke-width: 6;
+    }
+
+    .part {
+      stroke: #222;
+      stroke-width: 4;
+      fill: none;
+      display: none;
+    }
+
+    #gameInfo {
+      font-size: 28px;
+      letter-spacing: 6px;
+      margin: 20px 0;
+      font-weight: bold;
+      color: #222;
+    }
+
+    #hint {
+      font-style: italic;
+      color: #666;
+      margin-bottom: 15px;
+    }
+
+    #letters {
+      margin: 10px auto 20px;
+    }
+
+    #letters button {
+      margin: 4px;
+      padding: 10px 14px;
+      font-size: 18px;
+      cursor: pointer;
+      border-radius: 6px;
+      border: 1px solid #999;
+      background-color: #f1f1f1;
+      transition: 0.2s ease;
+    }
+
+    #letters button:hover:not(:disabled) {
+      background-color: #ddd;
+    }
+
+    #letters button:disabled {
+      background-color: #bbb;
+      cursor: not-allowed;
+      color: #555;
+    }
+
+    #wrongGuesses {
+      color: #c0392b;
+      font-weight: bold;
+      font-size: 18px;
+      margin: 10px 0;
+    }
+
+    #newGameBtn {
+      margin-top: 20px;
+      padding: 12px 25px;
+      font-size: 18px;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    #newGameBtn:hover {
+      background-color: #43a047;
+    }
+
+    .popup {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: black;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+      text-align: center;
+      z-index: 10;
+      display: none;
+      max-width: 90%;
+    }
+
+    .popup img {
+      max-width: 100%;
+      border-radius: 12px;
+      margin-bottom: 15px;
+    }
+
+    .popup h2 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    .popup button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background-color: #333;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .popup button:hover {
+      background-color: #000;
+    }
+  </style>
+</head>
+<body>
+  <div class="game-box">
+    <h1>🎯 Hangman Game</h1>
+
+    <svg viewBox="0 0 200 250">
+      <line x1="20" y1="230" x2="180" y2="230" class="gallow" />
+      <line x1="50" y1="230" x2="50" y2="20" class="gallow" />
+      <line x1="50" y1="20" x2="140" y2="20" class="gallow" />
+      <line x1="140" y1="20" x2="140" y2="50" class="gallow" />
+
+      <circle cx="140" cy="70" r="20" id="head" class="part" />
+      <line x1="140" y1="90" x2="140" y2="150" id="body" class="part" />
+      <line x1="140" y1="110" x2="110" y2="130" id="armLeft" class="part" />
+      <line x1="140" y1="110" x2="170" y2="130" id="armRight" class="part" />
+      <line x1="140" y1="150" x2="115" y2="190" id="legLeft" class="part" />
+      <line x1="140" y1="150" x2="165" y2="190" id="legRight" class="part" />
+    </svg>
+
+    <p id="gameInfo">_ _ _ _ _</p>
+    <p id="hint">Hint: ...</p>
+    <div id="letters"></div>
+    <p id="wrongGuesses"></p>
+    <button id="newGameBtn">🔁 New Game</button>
+
+    <div class="popup" id="popup">
+      <img id="popupGif" src="" alt="result gif">
+      <h2 id="popupMessage">You win!</h2>
+      <button onclick="closePopup()">Close</button>
+    </div>
+  </div>
+
+  <script>
+    const words = [
+      { word: "pyramid", hint: "Famous Egyptian structure" },
+      { word: "ocean", hint: "Large body of water" },
+      { word: "computer", hint: "Machine used for coding" },
+      { word: "hangman", hint: "The game you're playing" },
+      { word: "library", hint: "Place full of books" },
+      { word: "elephant", hint: "Largest land animal" },
+      { word: "giraffe", hint: "Tall animal with a long neck" },
+      { word: "banana", hint: "Yellow fruit monkeys love" },
+      { word: "puzzle", hint: "Something you solve" },
+      { word: "galaxy", hint: "A collection of stars" }
+    ];
+
+    const parts = ["head", "body", "armLeft", "armRight", "legLeft", "legRight"];
+    let chosen, word, guessed, wrongLetters;
+    const maxWrong = parts.length;
+
+    const gameInfo = document.getElementById("gameInfo");
+    const wrongGuesses = document.getElementById("wrongGuesses");
+    const hintText = document.getElementById("hint");
+    const popup = document.getElementById("popup");
+    const popupGif = document.getElementById("popupGif");
+    const popupMessage = document.getElementById("popupMessage");
+
+    function initGame() {
+      chosen = words[Math.floor(Math.random() * words.length)];
+      word = chosen.word;
+      guessed = [];
+      wrongLetters = [];
+
+      gameInfo.textContent = "_ ".repeat(word.length).trim();
+      hintText.textContent = "Hint: " + chosen.hint;
+      wrongGuesses.textContent = "";
+      popup.style.display = "none";
+
+      parts.forEach(id => document.getElementById(id).style.display = "none");
+
+      const letterContainer = document.getElementById("letters");
+      letterContainer.innerHTML = "";
+      for (let i = 65; i <= 90; i++) {
+        const letter = String.fromCharCode(i).toLowerCase();
+        const btn = document.createElement("button");
+        btn.textContent = letter;
+        btn.addEventListener("click", () => handleGuess(letter, btn));
+        letterContainer.appendChild(btn);
+      }
+    }
+
+    function handleGuess(letter, button) {
+      button.disabled = true;
+      if (word.includes(letter)) {
+        guessed.push(letter);
+      } else {
+        wrongLetters.push(letter);
+        if (wrongLetters.length <= maxWrong) {
+          document.getElementById(parts[wrongLetters.length - 1]).style.display = "inline";
+        }
+      }
+      updateDisplay();
+    }
+
+    function updateDisplay() {
+      let displayWord = "";
+      for (let i = 0; i < word.length; i++) {
+        displayWord += guessed.includes(word[i]) ? word[i] + " " : "_ ";
+      }
+
+      gameInfo.textContent = displayWord.trim();
+      wrongGuesses.textContent = `❌ ${wrongLetters.length} / ${maxWrong} — [ ${wrongLetters.join(" ")} ]`;
+
+      if (!displayWord.includes("_")) {
+        setTimeout(() => {
+          showPopup("🎉 You Won!", "Win.gif");
+        }, 300);
+        disableAllButtons();
+      } else if (wrongLetters.length >= maxWrong) {
+        setTimeout(() => {
+          showPopup("💀 Game Over!", "Lose.gif");
+        }, 300);
+        disableAllButtons();
+      }
+    }
+
+    function disableAllButtons() {
+      document.querySelectorAll("#letters button").forEach(btn => btn.disabled = true);
+    }
+
+    function showPopup(message, gifURL) {
+      popupMessage.textContent = message;
+      popupGif.src = gifURL;
+      popup.style.display = "block";
+    }
+
+    function closePopup() {
+      popup.style.display = "none";
+    }
+
+    document.getElementById("newGameBtn").addEventListener("click", initGame);
+    initGame();
+  </script>
+</body>
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit Card</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="circle1"></div>
+    <div class="circle2"></div>
+    
+    <div class="card">
+        <div class="front">
+            <div class="bank">BANK NAME</div>
+            <div class="chip"></div>
+            <div class="number">1204 1251 1244 3554</div>
+            <div class="name">PAVLY NADER</div>
+            <div class="expire">12/29</div>
+        </div>
+        <div class="back">
+            <div class="strip"></div>
+            <div class="cvv">CVV NUMBER</div>
+            <div class="sign">pavly</div>
+        </div>
+    </div>
+    <style>
+        body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #000, #222);
+    margin: 0;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+}
+
+.circle1 {
+    border-radius: 50%;
+    position: absolute;
+    background: linear-gradient(to bottom, #ff6b6b, #ff8e8e);
+    width: 200px;
+    height: 200px;
+    transform: translateX(-200px) translateY(-100px);
+    filter: blur(10px);
+}
+
+.circle2 {
+    border-radius: 50%;
+    position: absolute;
+    background: linear-gradient(to top, #4facfe, #00f2fe);
+    width: 200px;
+    height: 200px;
+    transform: translateX(200px) translateY(100px);
+    filter: blur(10px);
+}
+
+.card {
+    transform-style: preserve-3d;
+    transition: transform 0.8s ease;
+    position: relative;
+    width: 340px;
+    height: 200px;
+    perspective: 1000px;
+}
+
+.card:hover {
+    transform: rotateY(180deg);
+}
+
+.front, .back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.back {
+    transform: rotateY(180deg);
+    cursor: pointer;
+}
+
+.bank {
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    color: white;
+    text-align: right;
+}
+
+.chip {
+    width: 40px;
+    height: 32px;
+    background: linear-gradient(to bottom right, #c9a66b, #e5c887);
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.number {
+    font-size: 18px;
+    color: white;
+    letter-spacing: 2px;
+    margin: 10px 0;
+}
+
+.name, .expire {
+    font-size: 16px;
+    color: white;
+    text-transform: uppercase;
+}
+
+.expire {
+    align-self: flex-end;
+}
+
+.strip {
+    background-color: #000;
+    height: 40px;
+    margin-top: 20px;
+}
+
+.cvv {
+    background-color: white;
+    color: #000;
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 4px;
+    width: fit-content;
+    margin: 10px 0;
+}
+
+.sign {
+    font-style: italic;
+    font-size: 12px;
+    text-align: right;
+    color: white;
+    border-top: 1px solid rgba(255,255,255,0.3);
+    padding-top: 5px;
+}
+    </style>
+</body>
+</html>

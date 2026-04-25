@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Avengers Memory Game</title>
+  <style>
+    body {
+      background-color: aquamarine;
+      font-family: Arial, sans-serif;
+    }
+
+    #container {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-gap: 10px;
+      width: 480px;
+      margin: 50px auto;
+      background-color: white;
+      border-radius: 10px;
+      padding: 10px;
+    }
+
+    .card {
+      height: 100px;
+      width: 100px;
+      border: 1px solid black;
+      border-radius: 10px;
+      background-color: white;
+      cursor: pointer;
+      box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 32px;
+      font-weight: bold;
+      transition: all 0.3s ease-in-out;
+      position: relative;
+    }
+
+    .card:hover {
+      transform: scale(1.1);
+    }
+
+    .card.flipped {
+      background-color: #f8f8f8;
+    }
+
+    .card.matched {
+      background-color: lightgreen;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+<div id="container"></div>
+
+<script>
+  const avengerEmojis = ['🤖', '🛡️', '🔨', '💪', '🕷️', '🏹', '🐾', '👁️'];
+  const allEmojis = [...avengerEmojis, ...avengerEmojis]; 
+  allEmojis.sort(() => 0.5 - Math.random()); 
+
+  const container = document.getElementById('container');
+  let firstCard = null;
+  let secondCard = null;
+  let lockBoard = false;
+
+  allEmojis.forEach((emoji, index) => {
+    const card = document.createElement('div');
+    card.classList.add('card');
+    card.dataset.emoji = emoji;
+    card.innerText = '?';
+
+    card.addEventListener('click', () => {
+      if (lockBoard || card.classList.contains('flipped')) return;
+
+      card.classList.add('flipped');
+      card.innerText = emoji;
+
+      if (!firstCard) {
+        firstCard = card;
+      } else {
+        secondCard = card;
+        lockBoard = true;
+
+        if (firstCard.dataset.emoji === secondCard.dataset.emoji) {
+          firstCard.classList.add('matched');
+          secondCard.classList.add('matched');
+          resetTurn();
+        } else {
+          setTimeout(() => {
+            firstCard.classList.remove('flipped');
+            secondCard.classList.remove('flipped');
+            firstCard.innerText = '?';
+            secondCard.innerText = '?';
+            resetTurn();
+          }, 1000);
+        }
+      }
+    });
+
+    container.appendChild(card);
+  });
+
+  function resetTurn() {
+    firstCard = null;
+    secondCard = null;
+    lockBoard = false;
+  }
+</script>
+
+</body>
+</html>
