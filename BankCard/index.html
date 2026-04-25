@@ -4,15 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Credit Card</title>
-    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<a href="../" style="position:fixed;top:20px;left:20px;text-decoration:none;background:#38bdf8;padding:10px;border-radius:10px;color:black;font-weight:bold;">
+<a href="../" style="position:fixed;top:20px;left:20px;text-decoration:none;background:#38bdf8;padding:10px;border-radius:10px;color:black;font-weight:bold;z-index:1000;">
   ⬅ Back
 </a>
     <div class="circle1"></div>
     <div class="circle2"></div>
-    
+
     <div class="card">
         <div class="front">
             <div class="bank">BANK NAME</div>
@@ -37,6 +36,7 @@
     margin: 0;
     overflow: hidden;
     font-family: Arial, sans-serif;
+    perspective: 1000px;
 }
 
 .circle1 {
@@ -65,7 +65,7 @@
     position: relative;
     width: 340px;
     height: 200px;
-    perspective: 1000px;
+    cursor: pointer;
 }
 
 .card:hover {
@@ -82,14 +82,18 @@
     backdrop-filter: blur(12px);
     box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
 }
 
+.front {
+    transform: rotateY(0deg);
+}
+
 .back {
     transform: rotateY(180deg);
-    cursor: pointer;
 }
 
 .bank {
