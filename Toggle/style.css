@@ -2,24 +2,28 @@ body{
     background-color: skyblue;
     transition: background-color 0.3s ease;
     display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
 }
 body:has(.t:checked){
     background-color: black;
 }
 .rec{
-    width: 600px;
-    height: 200px;
+    width: 90%;
+    max-width: 600px;
+    height: clamp(80px, 20vw, 200px);
     background-color: lightgrey;
     background: rgba(255, 255, 255, 0.5);
     border-radius: 200px;
-    transform: translateX(400px) translateY(300px);
 }
 .t{
     display: none;
 }
 .circle{
-    height: 190px;
-    width: 190px;
+    height: clamp(70px, 19vw, 190px);
+    width: clamp(70px, 19vw, 190px);
     background-color: skyblue;
     transform: translateY(5px) translateX(5px);
     border-radius: 50%;
@@ -27,14 +31,14 @@ body:has(.t:checked){
     transition: transform 0.3s;
 }
 .t:checked + .circle{
-    transform: translateX(405px) translateY(5px);
+    transform: translateX(calc(100% + 5px)) translateY(5px);
     background-color: black;
 }
 .sun{
-    width: 90%;
-    height: 90%;
-    margin-left: 10px;
-    margin-top: 10px;
+    width: 85%;
+    height: 85%;
+    margin-left: 7.5%;
+    margin-top: 7.5%;
     border-radius: 50%;
     object-fit: cover;
     position: absolute;
@@ -42,10 +46,10 @@ body:has(.t:checked){
     transition: opacity 0.3s ease;
   }
   .moon{
-    width: 90%;
-    height: 90%;
-    margin-left: 10px;
-    margin-top: 10px;
+    width: 85%;
+    height: 85%;
+    margin-left: 7.5%;
+    margin-top: 7.5%;
     border-radius: 50%;
     object-fit: cover;
     position: absolute;

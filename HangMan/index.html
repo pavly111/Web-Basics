@@ -34,8 +34,8 @@
     }
 
     svg {
-      width: 200px;
-      height: 250px;
+      width: clamp(140px, 50vw, 200px);
+      height: clamp(175px, 62vw, 250px);
       margin: 0 auto 20px;
       display: block;
     }
@@ -72,13 +72,19 @@
 
     #letters button {
       margin: 4px;
-      padding: 10px 14px;
-      font-size: 18px;
+      padding: clamp(6px, 2vw, 10px) clamp(8px, 3vw, 14px);
+      font-size: clamp(14px, 4vw, 18px);
       cursor: pointer;
       border-radius: 6px;
       border: 1px solid #999;
       background-color: #f1f1f1;
       transition: 0.2s ease;
+    }
+
+    @media(max-width: 480px) {
+      .game-box { padding: 20px 15px; }
+      h1 { font-size: 1.8rem; }
+      #gameInfo { font-size: 20px; letter-spacing: 4px; }
     }
 
     #letters button:hover:not(:disabled) {

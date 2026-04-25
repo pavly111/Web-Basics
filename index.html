@@ -62,8 +62,19 @@
       opacity: 0.6;
     }
 
-    @media(max-width: 500px) {
-      header { font-size: 1.5rem; }
+    @media(max-width: 768px) {
+      header { font-size: 1.5rem; padding: 30px 15px; }
+      .grid { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; padding: 15px; }
+      .card { padding: 15px; }
+      .card h3 { font-size: 1rem; margin-bottom: 10px; }
+      .card a { padding: 8px 12px; font-size: 0.9rem; }
+    }
+    @media(max-width: 480px) {
+      header { font-size: 1.2rem; }
+      .grid { grid-template-columns: 1fr 1fr; gap: 12px; padding: 12px; }
+      .card { padding: 12px; border-radius: 15px; }
+      .card h3 { font-size: 0.95rem; }
+      .card a { padding: 8px 10px; font-size: 0.85rem; }
     }
   </style>
 </head>

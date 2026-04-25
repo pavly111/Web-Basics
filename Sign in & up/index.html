@@ -16,7 +16,8 @@
     }
 
     .container {
-      width: 800px;
+      width: 90%;
+      max-width: 800px;
       height: 500px;
       margin: 7% auto;
       position: relative;
@@ -152,6 +153,27 @@
       cursor: pointer;
       font-size: 16px;
       color: gray;
+    }
+    @media(max-width: 768px) {
+      .container {
+        flex-direction: column;
+        height: auto;
+        min-height: 500px;
+      }
+      .form-section, .brown-section {
+        width: 100%;
+        position: relative;
+        padding: 40px 20px;
+      }
+      .brown-section {
+        right: auto;
+      }
+      .switch-active .form-section {
+        transform: translateX(0);
+      }
+      .switch-active .brown-section {
+        transform: translateX(0);
+      }
     }
   </style>
 </head>

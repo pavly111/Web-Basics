@@ -43,9 +43,11 @@
     border-radius: 50%;
     position: absolute;
     background: linear-gradient(to bottom, #ff6b6b, #ff8e8e);
-    width: 200px;
-    height: 200px;
-    transform: translateX(-200px) translateY(-100px);
+    width: 30vmin;
+    height: 30vmin;
+    max-width: 200px;
+    max-height: 200px;
+    transform: translateX(-25vmin) translateY(-15vmin);
     filter: blur(10px);
 }
 
@@ -53,9 +55,11 @@
     border-radius: 50%;
     position: absolute;
     background: linear-gradient(to top, #4facfe, #00f2fe);
-    width: 200px;
-    height: 200px;
-    transform: translateX(200px) translateY(100px);
+    width: 30vmin;
+    height: 30vmin;
+    max-width: 200px;
+    max-height: 200px;
+    transform: translateX(25vmin) translateY(15vmin);
     filter: blur(10px);
 }
 
@@ -63,8 +67,10 @@
     transform-style: preserve-3d;
     transition: transform 0.8s ease;
     position: relative;
-    width: 340px;
-    height: 200px;
+    width: 85vw;
+    max-width: 340px;
+    height: calc(85vw * 0.588);
+    max-height: 200px;
     cursor: pointer;
 }
 

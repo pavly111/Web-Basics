@@ -8,13 +8,15 @@
     body {
       background-color: aquamarine;
       font-family: Arial, sans-serif;
+      padding: 20px;
+      min-height: 100vh;
     }
 
     #container {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       grid-gap: 10px;
-      width: 480px;
+      width: clamp(280px, 90vw, 480px);
       margin: 50px auto;
       background-color: white;
       border-radius: 10px;
@@ -22,8 +24,8 @@
     }
 
     .card {
-      height: 100px;
-      width: 100px;
+      height: clamp(60px, 20vw, 100px);
+      width: clamp(60px, 20vw, 100px);
       border: 1px solid black;
       border-radius: 10px;
       background-color: white;
@@ -32,7 +34,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 32px;
+      font-size: clamp(18px, 6vw, 32px);
       font-weight: bold;
       transition: all 0.3s ease-in-out;
       position: relative;
@@ -40,6 +42,11 @@
 
     .card:hover {
       transform: scale(1.1);
+    }
+
+    @media(max-width: 360px) {
+      #container { grid-gap: 6px; padding: 6px; }
+      .card { border-radius: 6px; }
     }
 
     .card.flipped {
